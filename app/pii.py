@@ -3,19 +3,26 @@ from __future__ import annotations
 import hashlib
 import re
 
+# Thứ tự quan trọng: pattern dài/cụ thể (thẻ, CCCD) chạy trước pattern ngắn (điện thoại)
+# để một chuỗi số dài không bị che dở dang bởi pattern ngắn hơn.
 PII_PATTERNS: dict[str, str] = {
     "email": r"[\w\.-]+@[\w\.-]+\.\w+",
-    "phone_vn": r"(?<!\d)(?:\+84|0)(?:[ .-]?\d){9}(?!\d)",
+    # Thẻ thanh toán: 4 nhóm 4 số cùng một kiểu phân tách, hoặc 13–19 số liền nhau.
+    # Không cho phân tách tùy ý giữa từng chữ số để không nuốt số điện thoại đứng cạnh.
+    "credit_card": r"(?<!\d)(?:\d{4}([ -]?)\d{4}\1\d{4}\1\d{4}|\d{13,19})(?!\d)",
     "cccd": r"\b\d{12}\b",
-    "credit_card": r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b",
-    # TODO: Add more patterns (e.g., Passport, Vietnamese address keywords)
+    "phone_vn": r"(?<!\d)(?:\+84|0)(?:[ .-]?\d){9}(?!\d)",
+    # Hộ chiếu Việt Nam: 1 chữ cái in hoa + 7 chữ số, ví dụ B1234567.
+    "passport": r"\b[A-Z]\d{7}\b",
 }
+
+_COMPILED_PATTERNS = {name: re.compile(pattern) for name, pattern in PII_PATTERNS.items()}
 
 
 def scrub_text(text: str) -> str:
     safe = text
-    for name, pattern in PII_PATTERNS.items():
-        safe = re.sub(pattern, f"[REDACTED_{name.upper()}]", safe)
+    for name, pattern in _COMPILED_PATTERNS.items():
+        safe = pattern.sub(f"[REDACTED_{name.upper()}]", safe)
     return safe
 
 

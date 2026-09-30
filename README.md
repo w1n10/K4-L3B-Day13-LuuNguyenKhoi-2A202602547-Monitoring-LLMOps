@@ -143,6 +143,14 @@ python scripts/validate_dashboard.py
 python -m pytest -q
 ```
 
+Dashboard runtime 6 panel được dựng từ `data/logs.jsonl`:
+
+```bash
+python scripts/build_dashboard.py          # tạo data/dashboard.html; thêm --watch để cập nhật mỗi 30s
+```
+
+Nếu cổng 8000 đã bị app khác chiếm (ví dụ Docker), chạy API bằng `--port 8013` và đặt `LAB_BASE_URL=http://127.0.0.1:8013` cho `load_test.py`/`inject_incident.py`.
+
 Baseline log chưa đạt là bình thường vì các `TODO` của CP1 chưa được làm. Ghi lại kết quả baseline vào `submission/REPORT.md` trước khi sửa.
 
 ## Lộ trình 9:00–13:00 (240 phút)

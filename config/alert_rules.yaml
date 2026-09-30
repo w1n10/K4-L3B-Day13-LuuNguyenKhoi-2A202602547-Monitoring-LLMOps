@@ -1,25 +1,33 @@
 alerts:
-  - name: TODO_alert_1
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: HighLatencyP95
+    severity: warning
+    # Cảnh báo sớm ở 2000ms để còn thời gian xử lý trước khi chạm SLO 3000ms.
+    condition: 'p95(response_sent.latency_ms) > 2000'
+    duration: 5m
     type: symptom-based
     channel: slack
-    owner: TODO
+    slack_channel: '#k4-l3b-alerts'
+    owner: student-2A202602547
+    slo: fast_successful_requests
     runbook: docs/alerts.md#alert-1
-  - name: TODO_alert_2
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: HighErrorRateOrRetrievalFailure
+    severity: critical
+    condition: 'count(request_failed) / count(request_received) * 100 > 2 or tool_success_rate_pct(retrieval) < 90'
+    duration: 5m
     type: symptom-based
     channel: slack
-    owner: TODO
+    slack_channel: '#k4-l3b-alerts'
+    owner: student-2A202602547
+    slo: fast_successful_requests
     runbook: docs/alerts.md#alert-2
-  - name: TODO_alert_3
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: CostPerRequestSpike
+    severity: warning
+    # Baseline ~0.002 USD/request; gấp đôi baseline duy trì 15 phút là bất thường.
+    condition: 'avg(response_sent.cost_usd) > 0.004'
+    duration: 15m
     type: symptom-based
     channel: slack
-    owner: TODO
+    slack_channel: '#k4-l3b-alerts'
+    owner: student-2A202602547
+    slo: daily_cost_usd_max
     runbook: docs/alerts.md#alert-3

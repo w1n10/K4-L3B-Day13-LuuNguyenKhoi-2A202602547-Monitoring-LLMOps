@@ -1,0 +1,7 @@
+# data/logs.jsonl — một request đầy đủ (request_received -> response_sent)
+
+{"service": "api", "payload": {"message_preview": "How should alerts be designed?"}, "event": "request_received", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "105a9cef3903", "correlation_id": "req-257f1240", "session_id": "s10", "level": "info", "ts": "2026-09-30T02:58:30.921700Z"}
+{"service": "api", "latency_ms": 151, "ttft_ms": 50, "tokens_in": 28, "tokens_out": 84, "cost_usd": 0.001344, "quality_score": 0.9, "tool_name": "retrieval", "tool_success": true, "payload": {"answer_preview": "Starter answer. You should improve this output logic and add better quality chec..."}, "event": "response_sent", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "105a9cef3903", "correlation_id": "req-257f1240", "session_id": "s10", "level": "info", "ts": "2026-09-30T02:58:31.073989Z"}
+
+# Request lỗi (practice scenario tool_fail)
+{"service": "api", "error_type": "RuntimeError", "tool_name": "retrieval", "tool_success": false, "payload": {"detail": "Vector store timeout", "message_preview": "Can I get help with policy and monitoring?"}, "event": "request_failed", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "75af07890985", "correlation_id": "req-4d598f2c", "session_id": "s04", "level": "error", "ts": "2026-09-30T02:57:12.513352Z"}

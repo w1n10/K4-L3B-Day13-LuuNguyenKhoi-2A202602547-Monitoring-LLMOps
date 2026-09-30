@@ -1,0 +1,8 @@
+# Input: data/sample_queries.jsonl dòng của u01 (email), u05 (điện thoại VN), u09 (thẻ thanh toán) — PII giả do repo cung cấp.
+# Output: dòng request_received tương ứng trong data/logs.jsonl (lần chạy gần nhất), đã scrub trước khi ghi file.
+
+u01 -> {"service": "api", "payload": {"message_preview": "What is your refund policy? My email is [REDACTED_EMAIL]"}, "event": "request_received", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "2055254ee30a", "correlation_id": "req-1b76f299", "session_id": "s01", "level": "info", "ts": "2026-09-30T02:58:29.536634Z"}
+u05 -> {"service": "api", "payload": {"message_preview": "Here is my phone [REDACTED_PHONE_VN], what should be logged?"}, "event": "request_received", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "64f6ec689229", "correlation_id": "req-8f84fb18", "session_id": "s05", "level": "info", "ts": "2026-09-30T02:58:29.843435Z"}
+u09 -> {"service": "api", "payload": {"message_preview": "What is the policy for PII and credit card [REDACTED_CREDIT_CARD]?"}, "event": "request_received", "env": "dev", "feature": "qa", "model": "claude-sonnet-4-5", "user_id_hash": "4d14d5d4f719", "correlation_id": "req-66ae47c3", "session_id": "s09", "level": "info", "ts": "2026-09-30T02:58:30.767579Z"}
+
+# validate_logs.py (quét độc lập toàn bộ file): Potential PII leaks detected: 0

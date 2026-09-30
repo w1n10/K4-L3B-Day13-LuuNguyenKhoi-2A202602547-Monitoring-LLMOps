@@ -1,6 +1,7 @@
 import argparse
 import concurrent.futures
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -14,7 +15,8 @@ if str(REPO_ROOT) not in sys.path:
 from app.challenge import load_challenge, ordered_queries
 from app.cli import configure_utf8_stdio
 
-BASE_URL = "http://127.0.0.1:8000"
+# Đổi bằng LAB_BASE_URL nếu cổng 8000 đã bị app khác (vd. Docker) chiếm.
+BASE_URL = os.getenv("LAB_BASE_URL", "http://127.0.0.1:8000")
 QUERIES = Path("data/sample_queries.jsonl")
 
 

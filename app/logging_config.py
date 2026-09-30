@@ -23,15 +23,27 @@ class JsonlFileProcessor:
 
 
 
+# Field do hệ thống sinh ra (không phải input người dùng); không scrub để tránh
+# che nhầm, ví dụ user_id_hash 12 ký tự hex có thể toàn chữ số giống CCCD.
+_SYSTEM_FIELDS = frozenset({"ts", "level", "correlation_id", "user_id_hash"})
+
+
+def _scrub_value(value: Any) -> Any:
+    if isinstance(value, str):
+        return scrub_text(value)
+    if isinstance(value, dict):
+        return {k: _scrub_value(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_scrub_value(v) for v in value]
+    return value
+
+
 def scrub_event(_: Any, __: str, event_dict: dict[str, Any]) -> dict[str, Any]:
-    payload = event_dict.get("payload")
-    if isinstance(payload, dict):
-        event_dict["payload"] = {
-            k: scrub_text(v) if isinstance(v, str) else v for k, v in payload.items()
-        }
-    if "event" in event_dict and isinstance(event_dict["event"], str):
-        event_dict["event"] = scrub_text(event_dict["event"])
-    return event_dict
+    # Scrub đệ quy mọi field (kể cả payload lồng nhau và exception text), không chỉ payload.
+    return {
+        key: value if key in _SYSTEM_FIELDS else _scrub_value(value)
+        for key, value in event_dict.items()
+    }
 
 
 
@@ -42,10 +54,11 @@ def configure_logging() -> None:
             merge_contextvars,
             structlog.processors.add_log_level,
             structlog.processors.TimeStamper(fmt="iso", utc=True, key="ts"),
-            # TODO: Register your PII scrubbing processor here
-            # scrub_event,
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
+            # Scrub sau khi stack/exception đã được render thành text nhưng trước khi
+            # ghi file và render JSON, để không dữ liệu nào rời process khi còn PII.
+            scrub_event,
             JsonlFileProcessor(),
             structlog.processors.JSONRenderer(),
         ],
