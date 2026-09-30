@@ -8,7 +8,7 @@
 - **MSSV:** 2A202602547
 - **Lớp:** K4-L3B
 - **Repository URL:** https://github.com/w1n10/K4-L3B-Day13-LuuNguyenKhoi-2A202602547-Monitoring-LLMOps
-- **Commit SHA cuối:** _(điền sau commit cuối)_
+- **Commit SHA cuối:** `7751a1b52b9927bce3632525ba198ed9576724ce`
 - **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1` (cohort K4, incident `rag_slow`, seed 1312)
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-2A202602547`
 
