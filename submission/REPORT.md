@@ -89,7 +89,6 @@
 - **Cách hiểu luồng Metrics → Logs → Traces:** metric (dashboard) cho biết có bất thường và khi nào; log lọc trong khoảng đó để lấy `correlation_id` của một request chậm; trace cùng `correlation_id` cho thấy span nào chiếm thời gian. Cả ba phải chỉ về một nguyên nhân thì kết luận mới hợp lệ — ở đây là retrieval 2.5 s.
 - **Vai trò của prompt version, token/cost, SLO hoặc rollback trong vận hành LLM:** prompt version cho phép biết một request dùng prompt nào và đổi/rollback bằng label mà không sửa code; token/cost phát hiện prompt dài hoặc chi phí tăng; SLO 99.5% với error budget 0.5% cho biết khi nào nên dừng promote prompt/model mới.
 - **Điều quan trọng nhất đã học:** khoanh vùng sự cố bằng dữ liệu từ ba nguồn cùng khớp một request, không suy đoán từ một nguồn.
-- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** (1) chưa có trace chụp lúc `production` đang trỏ v2 (promote) — chỉ có trace baseline/candidate theo label và trace sau rollback về v1; (2) 23 trace đầu (kể cả trace incident) tạo trước khi có prompt nên ghi `local-fallback`; (3) 3 request đầu của lần chạy baseline concurrency 5 chậm 5–11 s (`req-f67b19bf`, `req-0a60f9d6`), chưa xác định nguyên nhân; (4) evidence `04`, `05` và ảnh `11` lấy từ lần chạy practice trước khi đổi tên log thành `logs.baseline.jsonl`; evidence `01`–`03` chạy lại sau CP3 trên `data/logs.jsonl` hiện tại; (5) chưa chạy lại toàn bộ test/validator trên commit cuối (làm ở CP4).
 
 ## 9. Checklist trước khi nộp
 
